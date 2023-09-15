@@ -7,20 +7,33 @@ const defaultlength = 16;
 
 /* Functions */
 app.get('/password', (req, res) => {
-    var length;
+    var length = 16;
     if (req.query.length != null)
     {
         length = req.query.length;
-        res.send(GeneratePassword(characters,length));
     }
-    else
+    switch(req.query.response)
     {
-        res.send(GeneratePassword());
+        case "XML":
+        case "xml":
+            var data = `<?xml version="1.0" encoding="UTF-8"?><password>` + GeneratePassword(characters, length) + `</password>`;
+            res.header("Content-Type", "application/xml");
+            res.status(200).send(data);
+            break;
+        case "JSON":
+        case "json":
+            res.json({
+                password: GeneratePassword(characters, length)
+            });
+            break;
+        default:
+            res.send(GeneratePassword(characters, length));
+            break;
     }
 })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`App listening on port ${port}`)
 })
 
 function GeneratePassword(characterset = characters, length = defaultlength) {

@@ -4,7 +4,7 @@ const app = express()
 const port = 3000
 const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
 const defaultlength = 16;
-const regex = /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/;
+const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$/;
 
 /* Functions */
 app.get('/password', (req, res) =>
@@ -42,10 +42,9 @@ app.get('/validate', (req, res) =>
     }
 })
 
-
 app.listen(port, () =>
 {
-    console.log(`App listening on port ${port}`)
+    console.log(`Password Generator API App listening on port ${port}`)
 })
 
 function GeneratePassword(characterset = characters, length = defaultlength)
@@ -62,12 +61,5 @@ function GeneratePassword(characterset = characters, length = defaultlength)
 
 function ValidatePassword(password)
 {
-    if (!password.match(regex))
-    {
-        return "Password isn't strong. A strong password should be a minimum of 8 characters and contain an uppercase, lowercase, digit, and special character. They also shouldn't have repeating characters.";
-    }
-    else
-    {
-        return "Password is strong.";
-    }
+    return !password.match(regex) ? "Sorry, this password isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters." : "This password is good.";
 }

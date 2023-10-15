@@ -9,7 +9,7 @@ const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$/
 /* Functions */
 app.get('/password', (req, res) =>
 {
-    var length = 16;
+    let length = defaultlength;
     if (req.query.length != null)
     {
         length = req.query.length;
@@ -18,7 +18,7 @@ app.get('/password', (req, res) =>
     {
         case "XML":
         case "xml":
-            var data = `<?xml version="1.0" encoding="UTF-8"?><password>` + GeneratePassword(characters, length) + `</password>`;
+            let data = `<?xml version="1.0" encoding="UTF-8"?><password>` + GeneratePassword(characters, length) + `</password>`;
             res.header("Content-Type", "application/xml");
             res.status(200).send(data);
             break;
@@ -49,8 +49,8 @@ app.listen(port, () =>
 
 function GeneratePassword(characterset = characters, length = defaultlength)
 {
-    var i = 0;
-    var password = "";
+    let i = 0;
+    let password = "";
     while (i < length)
     {
         password += characterset.charAt(Math.floor(Math.random() * characterset.length));
@@ -61,5 +61,5 @@ function GeneratePassword(characterset = characters, length = defaultlength)
 
 function ValidatePassword(password)
 {
-    return !password.match(regex) ? "Sorry, this password isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters." : "This password is good.";
+    return !password.match(regex) ? "Sorry, this password possibly isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters." : "This password is strong.";
 }

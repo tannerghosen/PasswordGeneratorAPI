@@ -3,12 +3,8 @@ By Tanner Ghosen
 
 <b>Requirements:</b>
 <ul>
-<li>Visual Studio 2019-2022 with Node.js</li>
-OR
-<li>Node.js</li>
-<ul>
-  <li>Express.js</li>
-</ul>
+<li>Visual Studio 2019-2022 with Node.js OR Node.js standalone</li>
+<li>Express.js</li>
 </ul>
 
 # Summary

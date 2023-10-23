@@ -56,7 +56,7 @@ function GeneratePassword(characterset = characters, length = defaultlength)
     let password = "";
     while (i < length)
     {
-        password += characterset.charAt(Math.floor(Math.random() * characterset.length));
+        password += characterset.charAt(Math.floor(Math.random() * characterset.length)); // add a random character from the characters string
         i++;
     }
     return password;

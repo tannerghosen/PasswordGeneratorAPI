@@ -15,7 +15,7 @@ password strength function as an extra bonus.
 
 ## How can I run it?
 You can either run it through Visual Studio 2019 through 2022 (perhaps even earlier, I'm not 100% sure) using Node.js developer tools, or Node.js itself. You will need
-Express.js installed for the latter.
-For Visual Studio, simply clone this project from GitHub and run the program in Visual Studio.
-For Node.js, open up command prompt and cd to the project folder. Then, type node app.js when you're located inside the project folder.
+Express.js installed for the latter globally.<br>
+For Visual Studio, simply clone this project from GitHub and run the program in Visual Studio.<br>
+For Node.js, open up command prompt and cd to the project folder. Then, type node app.js when you're located inside the project folder.<br>
 In either case, it will run by default on localhost on port 3000, though this can be changed in app.js.

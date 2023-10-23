@@ -4,7 +4,7 @@ const app = express()
 const port = 3000
 const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
 const defaultlength = 16;
-const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$/;
+const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$/; // password check regex
 
 /* Functions */
 app.get('/password', (req, res) =>
@@ -12,9 +12,12 @@ app.get('/password', (req, res) =>
     let length = defaultlength;
     if (req.query.length != null)
     {
-        length = req.query.length;
+        if (!IsNaN(req.query.length)) // if it's a number, set it.
+        {
+            length = req.query.length;
+        }
     }
-    switch(req.query.response)
+    switch(req.query.response) // response types: XML/xml, JSON/json, normal
     {
         case "XML":
         case "xml":
@@ -61,5 +64,6 @@ function GeneratePassword(characterset = characters, length = defaultlength)
 
 function ValidatePassword(password)
 {
-    return !password.match(regex) ? "Sorry, this password possibly isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters." : "This password is strong.";
+    // if password does not match regex, say it isn't strong, otherwise it is.
+    return !password.match(regex) ? "Sorry, this password isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters." : "This password is strong.";
 }

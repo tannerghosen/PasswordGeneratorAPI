@@ -19,3 +19,9 @@ Express.js installed for the latter globally.<br>
 For Visual Studio, simply clone this project from GitHub and run the program in Visual Studio.<br>
 For Node.js, open up command prompt and cd to the project folder. Then, type node app.js when you're located inside the project folder.<br>
 In either case, it will run by default on localhost on port 3000, though this can be changed in app.js.
+After that, open a web browser and go to localhost:3000.<br>
+The commands for the API are as follows:<br>
+/password - Generates a password. Has a length query parameter (which determines password length) and a response query parameter (which determines response type,
+either XML or JSON)<br>
+/validate - Validates a password against a regex to determine if it's strong or not based on a few criterias. Has a a password query parameter
+(which is the password you wish to validate) and a response query parameter (which determines response type, either XML or JSON)

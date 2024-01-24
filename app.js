@@ -12,12 +12,12 @@ app.get('/password', (req, res) =>
     let length = defaultlength;
     if (req.query.length != null)
     {
-        if (!IsNaN(req.query.length)) // if it's a number, set it.
+        if (!isNaN(req.query.length) && Number.isInteger(Number(req.query.length))) // if it's a number, set it.
         {
             length = req.query.length;
         }
     }
-    switch(req.query.response) // response types: XML/xml, JSON/json, normal
+    switch(req.query.response) // response types: XML/xml, JSON/json
     {
         case "XML":
         case "xml":
@@ -32,7 +32,7 @@ app.get('/password', (req, res) =>
             });
             break;
         default:
-            res.send(GeneratePassword(characters, length));
+            res.status(400).send("Invalid response type defined.");
             break;
     }
 })
@@ -41,7 +41,30 @@ app.get('/validate', (req, res) =>
 {
     if (req.query.password != null)
     {
-        res.send(ValidatePassword(req.query.password));
+        //res.send();
+        switch (req.query.response) // response types: XML/xml, JSON/json
+        {
+            case "XML":
+            case "xml":
+                let data = `<?xml version="1.0" encoding="UTF-8"?><validate>` + ValidatePassword(req.query.password) + `</validate>`;
+                res.header("Content-Type", "application/xml");
+                res.status(200).send(data);
+                break;
+            case "JSON":
+            case "json":
+                res.json({
+                    validate: ValidatePassword(req.query.password)
+                });
+                break;
+            default:
+                res.status(400).send("Invalid response type defined.");
+                break;
+        }
+    }
+    else if (!req.query.password)
+    {
+        res.status(400).send("Password is missing.");
+        return;
     }
 })
 

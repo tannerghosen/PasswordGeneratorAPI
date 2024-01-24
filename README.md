@@ -10,8 +10,8 @@ By Tanner Ghosen
 # Summary
 ## What is this program and how was it made?
 This is a password generator API that runs using JavaScript through Node.js and the Express.js back-end framework. 
-It can generate random passwords of specified length (or a default of 16) in multiple formats (plaintext, json or xml, depending on your use of the API) and has a 
-password strength function as an extra bonus.
+It can generate random passwords of specified length (or a default of 16) in multiple formats (JSON or XML, depending on your use of the API) and has a 
+password validation function as an extra bonus.
 
 ## How can I run it?
 You can either run it through Visual Studio 2019 through 2022 (perhaps even earlier, I'm not 100% sure) using Node.js developer tools, or Node.js itself. You will need

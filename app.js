@@ -41,7 +41,6 @@ app.get('/validate', (req, res) =>
 {
     if (req.query.password != null)
     {
-        //res.send();
         switch (req.query.response) // response types: XML/xml, JSON/json
         {
             case "XML":

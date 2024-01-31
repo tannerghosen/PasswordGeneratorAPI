@@ -10,7 +10,7 @@ By Tanner Ghosen
 # Summary
 ## What is this program and how was it made?
 This is a password generator API that runs using JavaScript through Node.js and the Express.js back-end framework. 
-It can generate random passwords of specified length (or a default of 16) in multiple formats (JSON or XML, depending on your use of the API) and has a 
+It can generate random passwords of specified length (or a default of 16) in multiple formats (JSON only at the moment<!-- or XML -->, depending on your use of the API) and has a 
 password validation function as an extra bonus.
 
 ## How can I run it?
@@ -20,8 +20,11 @@ For Visual Studio, simply clone this project from GitHub and run the program in 
 For Node.js, open up command prompt and cd to the project folder. Then, type node app.js when you're located inside the project folder.<br>
 In either case, it will run by default on localhost on port 3000, though this can be changed in app.js.
 After that, open a web browser and go to localhost:3000.<br>
-The commands for the API are as follows:<br>
+The POST commands for the API are as follows:<br>
 /password - Generates a password. Has a length query parameter (which determines password length) and a response query parameter (which determines response type,
-either XML or JSON)<br>
+<!--either XML or JSON--> 
+at the moment only JSON is available.)<br>
 /validate - Validates a password against a regex to determine if it's strong or not based on a few criterias. Has a a password query parameter
-(which is the password you wish to validate) and a response query parameter (which determines response type, either XML or JSON)
+(which is the password you wish to validate) and a response query parameter (which determines response type, 
+<!--either XML or JSON--> 
+at the moment only JSON is available.)<br>

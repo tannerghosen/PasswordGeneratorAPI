@@ -7,29 +7,47 @@ const defaultlength = 16;
 const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$/; // password check regex
 
 /* Functions */
-app.get('/password', (req, res) =>
+app.use(express.json());
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
+app.post('/password', (req, res) =>
 {
     let length = defaultlength;
-    if (req.query.length != null)
+    if (req.body.length != null)
     {
-        if (!isNaN(req.query.length) && Number.isInteger(Number(req.query.length))) // if it's a number, set it.
+        if (!isNaN(req.body.length) && Number.isInteger(Number(req.body.length)))
         {
-            length = req.query.length;
+            length = req.body.length;
         }
     }
-    switch(req.query.response) // response types: XML/xml, JSON/json
+    switch (req.body.response)
     {
-        case "XML":
+        // response types: XML/xml, JSON/json
+        /*case "XML":
         case "xml":
             let data = `<?xml version="1.0" encoding="UTF-8"?><password>` + GeneratePassword(characters, length) + `</password>`;
             res.header("Content-Type", "application/xml");
             res.status(200).send(data);
-            break;
+            break;*/
         case "JSON":
         case "json":
-            res.json({
-                password: GeneratePassword(characters, length)
-            });
+            try
+            {
+                res.status(200).json({
+                    password: GeneratePassword(characters, length)
+                });
+            }
+            catch (error)
+            {
+                console.error(error);
+                res.status(500).send("An error occured during password generation");
+            }
             break;
         default:
             res.status(400).send("Invalid response type defined.");
@@ -37,22 +55,23 @@ app.get('/password', (req, res) =>
     }
 })
 
-app.get('/validate', (req, res) =>
+app.post('/validate', (req, res) =>
 {
-    if (req.query.password != null)
+    if (req.body.password != null)
     {
-        switch (req.query.response) // response types: XML/xml, JSON/json
+        switch (req.body.response)
         {
-            case "XML":
+            // response types: XML/xml, JSON/json
+           /* case "XML":
             case "xml":
-                let data = `<?xml version="1.0" encoding="UTF-8"?><validate>` + ValidatePassword(req.query.password) + `</validate>`;
+                let data = `<?xml version="1.0" encoding="UTF-8"?><validate>` + ValidatePassword(req.body.password) + `</validate>`;
                 res.header("Content-Type", "application/xml");
                 res.status(200).send(data);
-                break;
+                break; */
             case "JSON":
             case "json":
                 res.json({
-                    validate: ValidatePassword(req.query.password)
+                    validate: ValidatePassword(req.body.password)
                 });
                 break;
             default:
@@ -60,10 +79,9 @@ app.get('/validate', (req, res) =>
                 break;
         }
     }
-    else if (!req.query.password)
+    else
     {
         res.status(400).send("Password is missing.");
-        return;
     }
 })
 

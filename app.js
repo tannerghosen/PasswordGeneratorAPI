@@ -9,6 +9,7 @@ const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$/
 /* Functions */
 app.use(express.json());
 
+// Allow CORS
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
@@ -19,69 +20,33 @@ app.use((req, res, next) => {
 app.post('/password', (req, res) =>
 {
     let length = defaultlength;
-    if (req.body.length != null)
+    if (req.body.length != null) // if length is not null we can do stuff
     {
         if (!isNaN(req.body.length) && Number.isInteger(Number(req.body.length)))
         {
             length = req.body.length;
         }
+        res.json({
+            password: GeneratePassword(characters, length)
+        });
     }
-    switch (req.body.response)
+    else
     {
-        // response types: XML/xml, JSON/json
-        /*case "XML":
-        case "xml":
-            let data = `<?xml version="1.0" encoding="UTF-8"?><password>` + GeneratePassword(characters, length) + `</password>`;
-            res.header("Content-Type", "application/xml");
-            res.status(200).send(data);
-            break;*/
-        case "JSON":
-        case "json":
-            try
-            {
-                res.status(200).json({
-                    password: GeneratePassword(characters, length)
-                });
-            }
-            catch (error)
-            {
-                console.error(error);
-                res.status(500).send("An error occured during password generation");
-            }
-            break;
-        default:
-            res.status(400).send("Invalid response type defined.");
-            break;
+        res.status(400).send("ERROR: 'length' is missing in request body.");
     }
 })
 
 app.post('/validate', (req, res) =>
 {
-    if (req.body.password != null)
+    if (req.body.password != null) // if password is not null we can do stuff
     {
-        switch (req.body.response)
-        {
-            // response types: XML/xml, JSON/json
-           /* case "XML":
-            case "xml":
-                let data = `<?xml version="1.0" encoding="UTF-8"?><validate>` + ValidatePassword(req.body.password) + `</validate>`;
-                res.header("Content-Type", "application/xml");
-                res.status(200).send(data);
-                break; */
-            case "JSON":
-            case "json":
-                res.json({
-                    validate: ValidatePassword(req.body.password)
-                });
-                break;
-            default:
-                res.status(400).send("Invalid response type defined.");
-                break;
-        }
+        res.json({
+            validate: ValidatePassword(req.body.password)
+        });
     }
     else
     {
-        res.status(400).send("Password is missing.");
+        res.status(400).send("ERROR: 'password' is missing in request body.");
     }
 })
 

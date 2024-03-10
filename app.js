@@ -4,7 +4,15 @@ const app = express()
 const port = 3000
 const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
 const defaultlength = 16;
-const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$/; // password check regex
+const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex
+/* It checks for:
+1 uppercase letter
+1 lowercase letter
+1 number
+1 special character
+should not repeat characters more than 5 times consecutively
+8-32 characters in width
+*/
 
 /* Functions */
 app.use(express.json());

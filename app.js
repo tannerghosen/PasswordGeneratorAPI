@@ -18,7 +18,8 @@ should not repeat characters more than 5 times consecutively
 app.use(express.json());
 
 // Allow CORS
-app.use((req, res, next) => {
+app.use((req, res, next) =>
+{
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -30,17 +31,21 @@ app.post('/password', (req, res) =>
     let length = defaultlength;
     if (req.body.length != null) // if length is not null we can do stuff
     {
-        if (!isNaN(req.body.length) && Number.isInteger(Number(req.body.length)))
+        if (!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) // if the length is not NaN and if it's a number
         {
-            length = req.body.length;
+            length = req.body.length; // our length is changed to the requested length
         }
+        // we create a json response
         res.json({
-            password: GeneratePassword(characters, length)
+            password: GeneratePassword(characters, length) // displayed as password: generatedpasswordgoeshere
         });
     }
-    else
+    else // if it's null we let the user know
     {
-        res.status(400).send("ERROR: 'length' is missing in request body.");
+        res.status(400);
+        res.json({
+            password: "ERROR: 'length' is missing in request body."
+        });
     }
 })
 
@@ -48,13 +53,17 @@ app.post('/validate', (req, res) =>
 {
     if (req.body.password != null) // if password is not null we can do stuff
     {
+        // we create a json response 
         res.json({
-            validate: ValidatePassword(req.body.password)
+            validate: ValidatePassword(req.body.password) // displayed as validate: validationgoeshere
         });
     }
-    else
+    else // if it's null we let the user know
     {
-        res.status(400).send("ERROR: 'password' is missing in request body.");
+        res.status(400);
+        res.json({
+            validate: "ERROR: 'password' is missing in request body."
+        });
     }
 })
 
@@ -65,12 +74,11 @@ app.listen(port, () =>
 
 function GeneratePassword(characterset = characters, length = defaultlength)
 {
-    let i = 0;
     let password = "";
-    while (i < length)
+    for (let i = 0; i < length; i++)
     {
+                    // Floor(Random([0 , 1]) * character set's length)
         password += characterset.charAt(Math.floor(Math.random() * characterset.length));
-        i++;
     }
     return password;
 }

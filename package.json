@@ -13,6 +13,6 @@
     "eslint": "^8.49.0"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.19.2"
   }
 }

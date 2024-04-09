@@ -20,12 +20,9 @@ For Visual Studio, simply clone this project from GitHub and run the program in 
 For Node.js, open up command prompt and cd to the project folder. Then, type node app.js when you're located inside the project folder.<br>
 In either case, it will run by default on localhost on port 3000, though this can be changed in app.js.
 After that, open a web browser and go to localhost:3000.<br>
-The POST commands for the API are as follows:<br>
-password - Generates a password. 'length' (integer) is the required request parameter which determines password length.<br>
-validate - Validates a password against a regex to determine if it's strong or not based on a few criterias. 'password' (string) is the required request parameter which is the password you wish to validate.<br>
 
 ## API Documentation
-This API expects all requests to be formatted as JSON strings.
+This API expects all requests to be formatted as JSON strings.<br>
 Since this API deals with passwords it's recommended this it's ran on a server using HTTPS.
 
 ### password 

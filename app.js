@@ -29,22 +29,22 @@ app.use((req, res, next) =>
 app.post('/password', (req, res) =>
 {
     let length = defaultlength;
-    if (req.body.length != null) // if length is not null we can do stuff
+    if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number
     {
-        if (!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) // if the length is not NaN and if it's a number
-        {
-            length = req.body.length; // our length is changed to the requested length
-        }
+        length = req.body.length ? req.body.length : 16; // our length is changed to the requested length
         // we create a json response
-        res.json({
-            password: GeneratePassword(characters, length) // displayed as password: generatedpasswordgoeshere
+        return res.json({
+            password: GeneratePassword(characters, length), // displayed as password: generatedpasswordgoeshere
+            warning: "",
+            error: ""
         });
     }
-    else // if it's null we let the user know
+    else // if our length is NaN, it's not the end of the world, we have a fallback
     {
-        res.status(400);
-        res.json({
-            password: "ERROR: 'length' is missing in request body."
+        return res.status(400).json({
+            password: GeneratePassword(characters, length), 
+            warning: "WARNING: 'length' was NaN. Defaulting to 16.",
+            error: ""
         });
     }
 })
@@ -54,15 +54,16 @@ app.post('/validate', (req, res) =>
     if (req.body.password != null) // if password is not null we can do stuff
     {
         // we create a json response 
-        res.json({
-            validate: ValidatePassword(req.body.password) // displayed as validate: validationgoeshere
+        return res.json({
+            validate: ValidatePassword(req.body.password), // displayed as validate: validationgoeshere
+            error: ""
         });
     }
     else // if it's null we let the user know
     {
-        res.status(400);
-        res.json({
-            validate: "ERROR: 'password' is missing in request body."
+        return res.status(400).json({
+            validate: "",
+            error: "ERROR: 'password' is missing in request body."
         });
     }
 })

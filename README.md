@@ -54,7 +54,7 @@ Successful Response:
 NaN Length Warning Response:
 ```
 {
-    "password": "sF@l1Szq89",
+    "password": "dh73&plA!s9qD3!s",
     "warning": "WARNING: 'length' was NaN. Defaulting to 16.",
     "error": null
 }

@@ -26,10 +26,10 @@ This API expects all requests to be formatted as JSON strings.<br>
 Since this API deals with passwords it's recommended this it's ran on a server using HTTPS.
 
 ### password 
-Endpoint: POST /password
-Request parameters: length (integer, passed in the request body, optional)
-Response type: JSON
-Response properties: password (contains generated password), warning (contains warning), error (contains error)
+Endpoint: POST /password<br>
+Request parameters: length (integer, passed in the request body, optional)<br>
+Response type: JSON<br>
+Response properties: password (contains generated password), warning (contains warning), error (contains error)<br>
 Responses:
 1. A password of the desired length.
 2. If length was null, the default length of 16 is used.
@@ -42,7 +42,7 @@ Request Example:
 }
 ```
 
-Response Examples:
+Response Examples:<br>
 Successful Response:
 ```
 {
@@ -61,10 +61,10 @@ NaN Length Warning Response:
 ```
 
 ### validate
-Endpoint: POST /validate
-Request parameters: password (string, passed in request body, required)
-Response type: JSON
-Response properties: validate (contains result of validation), error (contains error)
+Endpoint: POST /validate<br>
+Request parameters: password (string, passed in request body, required)<br>
+Response type: JSON<br>
+Response properties: validate (contains result of validation), error (contains error)<br>
 Responses:
 1. The password's strength after it's validated against a regex, either a. weak or b. strong.
 2. If password was null, an error is sent back in the response, and no validation occurs.
@@ -76,7 +76,7 @@ Request Example:
 }
 ```
 
-Response Examples:
+Response Examples:<br>
 Successful (Strong) Response:
 ```
 {

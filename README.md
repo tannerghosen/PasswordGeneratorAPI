@@ -29,11 +29,11 @@ Since this API deals with passwords it's recommended this it's ran on a server u
 Endpoint: POST /password<br>
 Request parameters: length (integer, passed in the request body, optional)<br>
 Response type: JSON<br>
-Response properties: password (contains generated password), warning (contains warning), error (contains error)<br>
+Response properties: password (contains generated password), error (contains error / warning)<br>
 Responses:
 1. A password of the desired length.
 2. If length was null, the default length of 16 is used.
-3. If length was NaN, the default length of 16 is used and a warning is mentioned in the response.
+3. If length was NaN, the default length of 16 is used and a warning is mentioned in the response in the error property.
 
 Request Example:
 ```
@@ -47,7 +47,6 @@ Successful Response:
 ```
 {
     "password": "dh73&plA!s9q",
-    "warning": null,
     "error": null
 }
 ```
@@ -55,8 +54,7 @@ NaN Length Warning Response:
 ```
 {
     "password": "dh73&plA!s9qD3!s",
-    "warning": "WARNING: 'length' was NaN. Defaulting to 16.",
-    "error": null
+    "error": "WARNING: 'length' was NaN. Defaulting to 16."
 }
 ```
 

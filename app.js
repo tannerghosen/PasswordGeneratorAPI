@@ -35,7 +35,6 @@ app.post('/password', (req, res) =>
         // we create a json response
         return res.json({
             password: GeneratePassword(characters, length), // displayed as password: generatedpasswordgoeshere
-            warning: "",
             error: ""
         });
     }
@@ -43,8 +42,7 @@ app.post('/password', (req, res) =>
     {
         return res.status(400).json({
             password: GeneratePassword(characters, length), 
-            warning: "WARNING: 'length' was NaN. Defaulting to 16.",
-            error: ""
+            error: "WARNING: 'length' was NaN. Defaulting to 16."
         });
     }
 })

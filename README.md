@@ -96,3 +96,25 @@ Null Length Error Response:
     "error": "ERROR: 'password' is missing in request body."
 }
 ```
+
+### ping
+Endpoint: POST /ping<br>
+Request parameters: none<br>
+Response type: JSON<br>
+Response properties: ping (contains response time)<br>
+Response: Response time between client and the API in ms
+
+Request Example:
+```
+{
+
+}
+```
+
+Response Example:<br>
+Successful Response:
+```
+{
+    "ping": "30ms"
+}
+```

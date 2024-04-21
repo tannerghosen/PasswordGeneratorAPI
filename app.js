@@ -29,7 +29,7 @@ app.use((req, res, next) =>
 // POST /password (length)
 app.post('/password', (req, res) =>
 {
-    // We get the requester's API for logging purposes, via x-forwarded-for or Node.js's socket.remoteAddress which is a string representation of the IP
+    // We get the requester's IP for logging purposes, via x-forwarded-for or Node.js's socket.remoteAddress which is a string representation of the IP
     let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     let length = defaultlength;
     if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number
@@ -42,7 +42,7 @@ app.post('/password', (req, res) =>
             error: ""
         });
     }
-    else // if our length is NaN, it's not the end of the world, we have a fallback
+    else // if our length is NaN, it's not the end of the world, we have a fallback, but we'll have to send a warning and a bad request response.
     {
         console.log(ip + " on /password: warning");
         return res.status(400).json({
@@ -74,6 +74,17 @@ app.post('/validate', (req, res) =>
         });
     }
 })
+
+// POST /ping
+app.post('/ping', (req, res) =>
+{
+    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    console.log(ip + " is pinging");
+    let timer = new Date().getTime();
+    return res.json({
+        ping: new Date().getTime() - timer + "ms"
+    });
+});
 
 // App
 app.listen(port, () =>

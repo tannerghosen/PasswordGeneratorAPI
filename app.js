@@ -21,17 +21,21 @@ app.use(express.json());
 app.use((req, res, next) =>
 {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
 
+// POST /password (length)
 app.post('/password', (req, res) =>
 {
+    // We get the requester's API for logging purposes, via x-forwarded-for or Node.js's socket.remoteAddress which is a string representation of the IP
+    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     let length = defaultlength;
     if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number
     {
-        length = req.body.length ? req.body.length : 16; // our length is changed to the requested length
+        console.log(ip + " on /password: success");
+        length = req.body.length ? req.body.length : length; // our length is changed to the requested length
         // we create a json response
         return res.json({
             password: GeneratePassword(characters, length), // displayed as password: generatedpasswordgoeshere
@@ -40,6 +44,7 @@ app.post('/password', (req, res) =>
     }
     else // if our length is NaN, it's not the end of the world, we have a fallback
     {
+        console.log(ip + " on /password: warning");
         return res.status(400).json({
             password: GeneratePassword(characters, length), 
             error: "WARNING: 'length' was NaN. Defaulting to 16."
@@ -47,10 +52,13 @@ app.post('/password', (req, res) =>
     }
 })
 
+// POST /validate (password)
 app.post('/validate', (req, res) =>
 {
+    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     if (req.body.password != null) // if password is not null we can do stuff
     {
+        console.log(ip + " on /validate: success");
         // we create a json response 
         return res.json({
             validate: ValidatePassword(req.body.password), // displayed as validate: validationgoeshere
@@ -59,6 +67,7 @@ app.post('/validate', (req, res) =>
     }
     else // if it's null we let the user know
     {
+        console.log(ip + " on /validate: error");
         return res.status(400).json({
             validate: "",
             error: "ERROR: 'password' is missing in request body."
@@ -66,11 +75,13 @@ app.post('/validate', (req, res) =>
     }
 })
 
+// App
 app.listen(port, () =>
 {
     console.log(`Password Generator API App listening on port ${port}`)
 })
 
+// Functions
 function GeneratePassword(characterset = characters, length = defaultlength)
 {
     let password = "";

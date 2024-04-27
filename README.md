@@ -98,21 +98,13 @@ Null Length Error Response:
 ```
 
 ### ping
-Endpoint: POST /ping<br>
+Endpoint: GET /ping<br>
 Request parameters: none<br>
 Response type: JSON<br>
 Response properties: ping (contains response time)<br>
 Response: Response time between client and the API in ms
 
-Request Example:
-```
-{
-
-}
-```
-
 Response Example:<br>
-Successful Response:
 ```
 {
     "ping": "30ms"

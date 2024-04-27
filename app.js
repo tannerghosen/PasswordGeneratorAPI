@@ -21,7 +21,7 @@ app.use(express.json());
 app.use((req, res, next) =>
 {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
@@ -30,7 +30,7 @@ app.use((req, res, next) =>
 app.post('/password', (req, res) =>
 {
     // We get the requester's IP for logging purposes, via x-forwarded-for or Node.js's socket.remoteAddress which is a string representation of the IP
-    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    let ip = req.ip || req.socket.remoteAddress;
     let length = defaultlength;
     if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number
     {
@@ -55,7 +55,7 @@ app.post('/password', (req, res) =>
 // POST /validate (password)
 app.post('/validate', (req, res) =>
 {
-    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    let ip = req.ip || req.socket.remoteAddress;
     if (req.body.password != null) // if password is not null we can do stuff
     {
         console.log(ip + " on /validate: success");
@@ -76,9 +76,9 @@ app.post('/validate', (req, res) =>
 })
 
 // POST /ping
-app.post('/ping', (req, res) =>
+app.get('/ping', (req, res) =>
 {
-    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    let ip = req.ip || req.socket.remoteAddress;
     console.log(ip + " is pinging");
     let timer = new Date().getTime();
     return res.json({

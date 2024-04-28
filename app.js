@@ -29,7 +29,7 @@ app.use((req, res, next) =>
 // POST /password (length)
 app.post('/password', (req, res) =>
 {
-    // We get the requester's IP for logging purposes, via x-forwarded-for or Node.js's socket.remoteAddress which is a string representation of the IP
+    // We get the requester's IP for logging purposes, via .ip or Node.js's .socket.remoteAddress, both of which are a string representations of the IP
     let ip = req.ip || req.socket.remoteAddress;
     let length = defaultlength;
     if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number
@@ -75,7 +75,7 @@ app.post('/validate', (req, res) =>
     }
 })
 
-// POST /ping
+// GET /ping
 app.get('/ping', (req, res) =>
 {
     let ip = req.ip || req.socket.remoteAddress;
@@ -92,7 +92,7 @@ app.listen(port, () =>
     console.log(`Password Generator API App listening on port ${port}`)
 })
 
-// Functions
+// Main Functions
 function GeneratePassword(characterset = characters, length = defaultlength)
 {
     let password = "";

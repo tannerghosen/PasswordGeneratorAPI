@@ -8,7 +8,7 @@ By Tanner Ghosen
 </ul>
 
 # Summary
-## What is this program and how was it made?
+## What is this API?
 This is a password generator API that runs using JavaScript through Node.js and the Express.js back-end framework. 
 It can generate random passwords of specified length (or a default of 16) and has a 
 password validation function as an extra bonus. It expects a JSON request and will send back a JSON response.
@@ -20,93 +20,7 @@ For Visual Studio, simply clone this project from GitHub and run the program in 
 For Node.js, open up command prompt and cd to the project folder. Then, type node app.js when you're located inside the project folder.<br>
 In either case, it will run by default on localhost on port 3000, though this can be changed in app.js.
 After that, open a web browser and go to localhost:3000.<br>
+Due to the sensitive nature of the content this API deals with, it is highly recommended to run it on a HTTPS server. <br>
 
-## API Documentation
-This API expects all requests to be formatted as JSON strings.<br>
-Since this API deals with passwords it's recommended this it's ran on a server using HTTPS.
-
-### password 
-Endpoint: POST /password<br>
-Request parameters: length (integer, passed in the request body, optional)<br>
-Response type: JSON<br>
-Response properties: password (contains generated password), error (contains error / warning)<br>
-Responses:
-1. A password of the desired length.
-2. If length was null, the default length of 16 is used.
-3. If length was NaN, the default length of 16 is used and a warning is mentioned in the response in the error property.
-
-Request Example:
-```
-{
-	"length": 12
-}
-```
-
-Response Examples:<br>
-Successful Response:
-```
-{
-    "password": "dh73&plA!s9q",
-    "error": null
-}
-```
-NaN Length Warning Response:
-```
-{
-    "password": "dh73&plA!s9qD3!s",
-    "error": "WARNING: 'length' was NaN. Defaulting to 16."
-}
-```
-
-### validate
-Endpoint: POST /validate<br>
-Request parameters: password (string, passed in request body, required)<br>
-Response type: JSON<br>
-Response properties: validate (contains result of validation), error (contains error)<br>
-Responses:
-1. The password's strength after it's validated against a regex, either a. weak or b. strong.
-2. If password was null, an error is sent back in the response, and no validation occurs.
-
-Request Example:
-```
-{
-	"validate": "dummypassword"
-}
-```
-
-Response Examples:<br>
-Successful (Strong) Response:
-```
-{
-    "validate": "This password is strong.",
-    "error": null
-}
-```
-Successful (Weak) Response:
-```
-{
-    "validate": "Sorry, this password isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters.",
-    "error": null
-}
-```
-Null Length Error Response:
-```
-{
-    "validate": "",
-    "error": "ERROR: 'password' is missing in request body."
-}
-```
-
-### ping
-Endpoint: GET /ping<br>
-Request parameters: none<br>
-Response type: JSON<br>
-Response properties: ping (contains response time)<br>
-Response: Response time between client and the API in ms
-
-Response Example:<br>
-```
-{
-    "ping": "30ms"
-}
-```
+## How do I use it?
+For more specific information on how to use the API, please refer to the [API Documentation](DOCUMENTATION.md).

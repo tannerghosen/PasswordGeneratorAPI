@@ -5,11 +5,11 @@ This API expects all requests to be formatted as JSON strings.<br>
 Endpoint: POST /password<br>
 Request parameters: length (integer, passed in the request body, optional)<br>
 Response type: JSON<br>
-Response properties: password (contains generated password), error (contains error / warning)<br>
+Response properties: data, which contains password (contains generated password)<br>
 Responses:
 1. A password of the desired length.
 2. If length was null, the default length of 16 is used.
-3. If length was NaN, the default length of 16 is used and a warning is mentioned in the response in the error property.
+3. If length was NaN, the default length of 16 is used.
 
 Request Example:
 ```
@@ -19,18 +19,13 @@ Request Example:
 ```
 
 Response Examples:<br>
-Successful Response:
+Response:
 ```
 {
-    "password": "dh73&plA!s9q",
-    "error": null
-}
-```
-NaN Length Warning Response:
-```
-{
-    "password": "dh73&plA!s9qD3!s",
-    "error": "WARNING: 'length' was NaN. Defaulting to 16."
+    "data"
+    {
+        "password": "dh73&plA!s9q"
+    }
 }
 ```
 
@@ -38,7 +33,7 @@ NaN Length Warning Response:
 Endpoint: POST /validate<br>
 Request parameters: password (string, passed in request body, required)<br>
 Response type: JSON<br>
-Response properties: validate (contains result of validation), error (contains error)<br>
+Response properties: data, which contains validate (contains result of validation), or error (error that occured)<br>
 Responses:
 1. The password's strength after it's validated against a regex, either a. weak or b. strong.
 2. If password was null, an error is sent back in the response, and no validation occurs.
@@ -54,21 +49,24 @@ Response Examples:<br>
 Successful (Strong) Response:
 ```
 {
-    "validate": "This password is strong.",
-    "error": null
+    "data":
+    {
+        "validate": "This password is strong."
+    }
 }
 ```
 Successful (Weak) Response:
 ```
 {
-    "validate": "Sorry, this password isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters.",
-    "error": null
+    "data":
+    {
+        "validate": "Sorry, this password isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters.",
+    }
 }
 ```
 Null Length Error Response:
 ```
 {
-    "validate": "",
     "error": "ERROR: 'password' is missing in request body."
 }
 ```

@@ -8,7 +8,7 @@ By Tanner Ghosen
 </ul>
 
 # Summary
-## What is this API?
+## What is this?
 This is a password generator API that runs using JavaScript through Node.js and the Express.js back-end framework. 
 It can generate random passwords of specified length (or a default of 16) and has a 
 password validation function as an extra bonus. It expects a JSON request and will send back a JSON response.

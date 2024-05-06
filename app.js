@@ -5,6 +5,9 @@ const port = 3000
 const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
 const defaultlength = 16;
 const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex
+
+// https://www.npmjs.com/package/express-rate-limit?activeTab=readme
+
 /* It checks for:
 1 uppercase letter
 1 lowercase letter
@@ -34,22 +37,17 @@ app.post('/password', (req, res) =>
     let length = defaultlength;
     if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number
     {
-        console.log(ip + " on /password: success");
-        length = req.body.length ? req.body.length : length; // our length is changed to the requested length
-        // we create a json response
-        return res.json({
-            password: GeneratePassword(characters, length), // displayed as password: generatedpasswordgoeshere
-            error: ""
-        });
+        length = req.body.length ? req.body.length : length
     }
-    else // if our length is NaN, it's not the end of the world, we have a fallback, but we'll have to send a warning and a bad request response.
-    {
-        console.log(ip + " on /password: warning");
-        return res.status(400).json({
-            password: GeneratePassword(characters, length), 
-            error: "WARNING: 'length' was NaN. Defaulting to 16."
-        });
-    }
+    console.log(ip + " on /password: success");
+    length = req.body.length ? req.body.length : length; // our length is changed to the requested length
+    // we create a json response
+    return res.json({
+        "data":
+        {
+            "password": GeneratePassword(characters, length) // displayed as password: generatedpasswordgoeshere
+        }
+    });
 })
 
 // POST /validate (password)
@@ -61,15 +59,16 @@ app.post('/validate', (req, res) =>
         console.log(ip + " on /validate: success");
         // we create a json response 
         return res.json({
-            validate: ValidatePassword(req.body.password), // displayed as validate: validationgoeshere
-            error: ""
+            "data":
+            {
+                "validate": ValidatePassword(req.body.password) // displayed as validate: validationgoeshere
+            }
         });
     }
     else // if it's null we let the user know
     {
         console.log(ip + " on /validate: error");
         return res.status(400).json({
-            validate: "",
             error: "ERROR: 'password' is missing in request body."
         });
     }

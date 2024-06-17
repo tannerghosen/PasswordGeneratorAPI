@@ -5,6 +5,7 @@ By Tanner Ghosen
 <ul>
 <li>Visual Studio 2019-2022 with Node.js OR Node.js standalone</li>
 <li>Express.js</li>
+<li><a href="https://www.npmjs.com/package/express-rate-limit?activeTab=readme">express-rate-limit</a></li>
 </ul>
 
 # Summary

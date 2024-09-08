@@ -3,7 +3,7 @@ By Tanner Ghosen
 
 <b>Requirements:</b>
 <ul>
-<li>Visual Studio 2019-2022 with Node.js OR Node.js standalone</li>
+<li>Visual Studio 2019-2022 with Node.js OR Visual Studio Code with Node.js OR Node.js standalone</li>
 <li>Express.js</li>
 <li><a href="https://www.npmjs.com/package/express-rate-limit?activeTab=readme">express-rate-limit</a></li>
 </ul>
@@ -15,12 +15,12 @@ It can generate random passwords of specified length (or a default of 16) and ha
 password validation function as an extra bonus. It expects a JSON request and will send back a JSON response.
 
 ## How can I run it?
-You can either run it through Visual Studio 2019 through 2022 (perhaps even earlier, I'm not 100% sure) using Node.js developer tools, or Node.js itself. You will need
-Express.js installed for the latter globally.<br>
-For Visual Studio, simply clone this project from GitHub and run the program in Visual Studio.<br>
-For Node.js, open up command prompt and cd to the project folder. Then, type node app.js when you're located inside the project folder.<br>
-In either case, it will run by default on localhost on port 3000, though this can be changed in app.js.
-After that, open a web browser and go to localhost:3000.<br>
+You can either run it through Visual Studio 2019 through 2022 (potentially earlier) using Node.js developer tools, or VS Code with Node.js installed, or Node.js itself.<br>
+For Visual Studio, in the virtual terminal type npm install to install dependencies then npm start or launch the program manually in the IDE to launch it.<br>
+For VS Code, in the virtual terminal type npm install to install dependencies then npm start to launch it.<br>
+For Node.js, open up command prompt and cd to the project folder. Then, type npm install to install dependencies then npm start when you're located inside the project folder.<br>
+In any case, the program will launch on localhost on port 3000, though this can be altered in app.js.
+After that, you can POST requests to it to generate and validate passwords, as well as GET request it for ping. More info is in the documentation listed below.<br>
 Due to the sensitive nature of the content this API deals with, it is highly recommended to run it on a HTTPS server. <br>
 
 ## How do I use it?

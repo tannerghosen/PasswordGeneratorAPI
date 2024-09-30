@@ -32,18 +32,17 @@ app.use((req, res, next) =>
     next();
 });
 
-// POST /password (length)
+// POST /password (length (optional))
 app.post('/password', (req, res) =>
 {
     // We get the requester's IP for logging purposes, via .ip or Node.js's .socket.remoteAddress, both of which are a string representations of the IP
     let ip = req.ip || req.socket.remoteAddress;
-    let length = defaultlength;
-    if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number
+    let length = defaultlength; // this is in case the user does not input a value, it's NaN, or some other issue.
+    if (Number.isInteger(Number(req.body.length))) // if the req.body.length is a valid integer (this includes strings, so "4" is a number too)
     {
-        length = req.body.length ? req.body.length : length
+        length = req.body.length; // we update the value of length with the actual one
     }
     console.log(ip + " on /password: success");
-    length = req.body.length ? req.body.length : length; // our length is changed to the requested length
     // we create a json response
     return res.json({
         "data":

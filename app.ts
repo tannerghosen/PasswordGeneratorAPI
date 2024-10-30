@@ -1,11 +1,14 @@
 /* Variables */
+import * as settings from './settings.json';
 const express = require('express')
 const expressrl = require('express-rate-limit');
 const app = express();
 const port : number = 3000;
 const characters : String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
 const defaultlength : number = 16;
-const regex : RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex
+const regex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex
+const minutes = settings.minutes;
+const requestlimit = settings.limit;
 
 /* It checks for:
 1 uppercase letter
@@ -19,8 +22,8 @@ should not repeat characters more than 5 times consecutively
 /* Functions */
 app.use(express.json());
 app.use(expressrl.rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 20, // Limit each IP to 20 requests per 15 minutes
+    windowMs: minutes * 60 * 1000, // 15 minutes
+    limit: requestlimit, // Limit each IP to 20 requests per 15 minutes
 }));
 
 // Allow CORS

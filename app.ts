@@ -40,26 +40,41 @@ app.use((req : any, res : any, next : any) =>
 app.post('/password', (req : any, res : any) =>
 {
     // We get the requester's IP for logging purposes, via .ip or Node.js's .socket.remoteAddress, both of which are a string representations of the IP
-    let ip : any = req.ip || req.socket.remoteAddress;
+    let ip: any = req.ip || req.socket.remoteAddress;
+    console.log(ip + " on /password: starting...");
+    // console.log("DEBUG: Length: " + req.body.length + " " + typeof req.body.length);
     let length : number = defaultlength;
-    if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number OR it's null
+    if (Number.isInteger(Number(req.body.length))) // if the length is a number, we're fine
     {
-        // set length to req.body.length parsed to an Integer if it's not null, otherwise set it to length (defaultlength)
-        length = req.body.length ? parseInt(req.body.length, 10) : length
+        length = req.body.length;
     }
-    console.log(length);
-    console.log(ip + " on /password: success");
-    //length = req.body.length ? req.body.length : length; // our length is changed to the requested length
-    if (length < 8 || length > 32)
+    if (typeof req.body.length === "string") // if length is a string
     {
-        console.log("Length is not great: " + length);
+        if (!isNaN(parseInt(req.body.length, 10))) // if length is a numeric string
+        {
+            length = parseInt(req.body.length, 10)
+        }
+        else // else it's nan
+        {
+            console.log("Length is a non-numeric string, setting it to default length");
+            length = defaultlength;
+        }
+    }
+    if (req.body.length == null || typeof req.body.length === "undefined") // if length is null or an undefined type value
+    {
+        console.log("Length is null / undefined, setting it to default length");
         length = defaultlength;
     }
-    let pass : string = "", i = 0;
-    while (DoesItMatchRegex(pass) == false)
+    if (length < 8 || length > 32) // if length provided is less than 8 or greater than 32
     {
-        if (i >= attemptlimit)
-            break;
+        console.log("Length is bad, length provided is " + length + " (needs to be 8> or <32)");
+        length = defaultlength;
+    }
+    console.log(ip + " on /password: success");
+    //length = req.body.length ? req.body.length : length; // our length is changed to the requested length
+    let pass: string = "", i : number = 0;
+    while (DoesItMatchRegex(pass) == false && i <= attemptlimit) // while it doesn't match a password regex and is less than or equal to attempt limit
+    {
         pass = GeneratePassword(length);
         i++;
     }
@@ -75,7 +90,8 @@ app.post('/password', (req : any, res : any) =>
 // POST /validate (password)
 app.post('/validate', (req : any, res : any) =>
 {
-    let ip : any = req.ip || req.socket.remoteAddress;
+    let ip: any = req.ip || req.socket.remoteAddress;
+    console.log(ip + " on /validate: starting...");
     if (req.body.password != null) // if password is not null we can do stuff
     {
         console.log(ip + " on /validate: success");

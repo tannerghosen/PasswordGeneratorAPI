@@ -11,8 +11,9 @@ var port = 3000;
 var characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
 var defaultlength = 16;
 var regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex
-var minutes = settings.minutes;
-var requestlimit = settings.limit;
+var minutes = settings.minutes; // timeout duration
+var requestlimit = settings.limit; // requests before timeout
+var attemptlimit = settings.attempts; // password generator attempts before giving up
 /* It checks for:
 1 uppercase letter
 1 lowercase letter
@@ -38,23 +39,35 @@ app.use(function (req, res, next) {
 app.post('/password', function (req, res) {
     // We get the requester's IP for logging purposes, via .ip or Node.js's .socket.remoteAddress, both of which are a string representations of the IP
     var ip = req.ip || req.socket.remoteAddress;
+    console.log(ip + " on /password: starting...");
+    // console.log("DEBUG: Length: " + req.body.length + " " + typeof req.body.length);
     var length = defaultlength;
-    if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number OR it's null
+    if (Number.isInteger(Number(req.body.length))) // if the length is not NaN and if it's a number OR it's null
      {
-        // set length to req.body.length parsed to an Integer if it's not null, otherwise set it to length (defaultlength)
-        length = req.body.length ? parseInt(req.body.length, 10) : length;
+        length = req.body.length;
     }
-    console.log(length);
-    console.log(ip + " on /password: success");
-    //length = req.body.length ? req.body.length : length; // our length is changed to the requested length
-    if (length < 8 || length > 32) {
-        console.log("Length is not great: " + length);
+    if (typeof req.body.length === "string") {
+        if (!isNaN(parseInt(req.body.length, 10))) {
+            length = parseInt(req.body.length, 10);
+        }
+        else {
+            console.log("Length is a non-numeric string, setting it to default length");
+            length = defaultlength;
+        }
+    }
+    if (req.body.length == null || typeof req.body.length === "undefined") {
+        console.log("Length is null / undefined, setting it to default length");
         length = defaultlength;
     }
+    if (length < 8 || length > 32) {
+        console.log("Length is bad, length provided is " + length + " (needs to be 8> or <32)");
+        length = defaultlength;
+    }
+    console.log(ip + " on /password: success");
+    //length = req.body.length ? req.body.length : length; // our length is changed to the requested length
     var pass = "", i = 0;
-    while (DoesItMatchRegex(pass) == false) {
-        if (i >= 1000)
-            break;
+    while (DoesItMatchRegex(pass) == false && i <= attemptlimit) // while it doesn't match a password regex and is less than or equal to attempt limit
+     {
         pass = GeneratePassword(length);
         i++;
     }
@@ -68,6 +81,7 @@ app.post('/password', function (req, res) {
 // POST /validate (password)
 app.post('/validate', function (req, res) {
     var ip = req.ip || req.socket.remoteAddress;
+    console.log(ip + " on /validate: starting...");
     if (req.body.password != null) // if password is not null we can do stuff
      {
         console.log(ip + " on /validate: success");

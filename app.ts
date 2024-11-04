@@ -107,7 +107,10 @@ app.post('/validate', (req : any, res : any) =>
     {
         console.log(ip + " on /validate: error");
         return res.status(400).json({
-            error: "ERROR: 'password' is null or undefined."
+            "data":
+            {
+                "validate": "ERROR: 'password' is null or undefined."
+            }
         });
     }
 })

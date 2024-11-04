@@ -65,10 +65,13 @@ Successful (Weak) Response:
     }
 }
 ```
-Null Length Error Response:
+Null / Undefined Length Error Response:
 ```
 {
-    "error": "ERROR: 'password' is missing in request body."
+    "data":
+    {
+        "validate": "ERROR: 'password' is null or undefined.",
+    }
 }
 ```
 

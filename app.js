@@ -39,16 +39,29 @@ app.post('/password', function (req, res) {
     // We get the requester's IP for logging purposes, via .ip or Node.js's .socket.remoteAddress, both of which are a string representations of the IP
     var ip = req.ip || req.socket.remoteAddress;
     var length = defaultlength;
-    if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number
+    if ((!isNaN(req.body.length) && Number.isInteger(Number(req.body.length))) || req.body.length == null) // if the length is not NaN and if it's a number OR it's null
      {
-        length = req.body.length ? req.body.length : length;
+        // set length to req.body.length parsed to an Integer if it's not null, otherwise set it to length (defaultlength)
+        length = req.body.length ? parseInt(req.body.length, 10) : length;
     }
+    console.log(length);
     console.log(ip + " on /password: success");
-    length = req.body.length ? req.body.length : length; // our length is changed to the requested length
+    //length = req.body.length ? req.body.length : length; // our length is changed to the requested length
+    if (length < 8 || length > 32) {
+        console.log("Length is not great: " + length);
+        length = defaultlength;
+    }
+    var pass = "", i = 0;
+    while (DoesItMatchRegex(pass) == false) {
+        if (i >= 1000)
+            break;
+        pass = GeneratePassword(length);
+        i++;
+    }
     // we create a json response
     return res.json({
         "data": {
-            "password": GeneratePassword(length) // displayed as password: generatedpasswordgoeshere
+            "password": pass // displayed as password: generatedpasswordgoeshere
         }
     });
 });
@@ -100,4 +113,7 @@ function GeneratePassword(length) {
 function ValidatePassword(password) {
     // if password does not match regex, say it isn't strong, otherwise it is.
     return !password.match(regex) ? "Sorry, this password isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters." : "This password is strong.";
+}
+function DoesItMatchRegex(password) {
+    return !password.match(regex) ? false : true;
 }

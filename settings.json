@@ -1,4 +1,5 @@
 {
   "minutes": 15,
-  "limit":  20
+  "limit": 20,
+  "attempts": 1000
 }

@@ -92,7 +92,7 @@ app.post('/validate', (req : any, res : any) =>
 {
     let ip: any = req.ip || req.socket.remoteAddress;
     console.log(ip + " on /validate: starting...");
-    if (req.body.password != null) // if password is not null we can do stuff
+    if (req.body.password != null || !(typeof req.body.password == "undefined")) // if password is not null we can do stuff
     {
         console.log(ip + " on /validate: success");
         // we create a json response 
@@ -107,7 +107,7 @@ app.post('/validate', (req : any, res : any) =>
     {
         console.log(ip + " on /validate: error");
         return res.status(400).json({
-            error: "ERROR: 'password' is missing in request body."
+            error: "ERROR: 'password' is null or undefined."
         });
     }
 })

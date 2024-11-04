@@ -42,24 +42,29 @@ app.post('/password', function (req, res) {
     console.log(ip + " on /password: starting...");
     // console.log("DEBUG: Length: " + req.body.length + " " + typeof req.body.length);
     var length = defaultlength;
-    if (Number.isInteger(Number(req.body.length))) // if the length is not NaN and if it's a number OR it's null
+    if (Number.isInteger(Number(req.body.length))) // if the length is a number, we're fine
      {
         length = req.body.length;
     }
-    if (typeof req.body.length === "string") {
-        if (!isNaN(parseInt(req.body.length, 10))) {
+    if (typeof req.body.length === "string") // if length is a string
+     {
+        if (!isNaN(parseInt(req.body.length, 10))) // if length is a numeric string
+         {
             length = parseInt(req.body.length, 10);
         }
-        else {
+        else // else it's nan
+         {
             console.log("Length is a non-numeric string, setting it to default length");
             length = defaultlength;
         }
     }
-    if (req.body.length == null || typeof req.body.length === "undefined") {
+    if (req.body.length == null || typeof req.body.length === "undefined") // if length is null or an undefined type value
+     {
         console.log("Length is null / undefined, setting it to default length");
         length = defaultlength;
     }
-    if (length < 8 || length > 32) {
+    if (length < 8 || length > 32) // if length provided is less than 8 or greater than 32
+     {
         console.log("Length is bad, length provided is " + length + " (needs to be 8> or <32)");
         length = defaultlength;
     }
@@ -82,7 +87,7 @@ app.post('/password', function (req, res) {
 app.post('/validate', function (req, res) {
     var ip = req.ip || req.socket.remoteAddress;
     console.log(ip + " on /validate: starting...");
-    if (req.body.password != null) // if password is not null we can do stuff
+    if (req.body.password != null || !(typeof req.body.password == "undefined")) // if password is not null we can do stuff
      {
         console.log(ip + " on /validate: success");
         // we create a json response 
@@ -96,7 +101,7 @@ app.post('/validate', function (req, res) {
      {
         console.log(ip + " on /validate: error");
         return res.status(400).json({
-            error: "ERROR: 'password' is missing in request body."
+            error: "ERROR: 'password' is null or undefined."
         });
     }
 });

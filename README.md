@@ -22,8 +22,8 @@ You can either run it through Visual Studio 2019 through 2022 (potentially earli
 For Visual Studio, in the virtual terminal type npm install to install dependencies then npm start or launch the program manually in the IDE to launch it.<br>
 For VS Code, in the virtual terminal type npm install to install dependencies then npm start to launch it.<br>
 For Node.js, open up command prompt and cd to the project folder. Then, type npm install to install dependencies then npm start when you're located inside the project folder.<br>
-In any of the above cases, to clean it you will need to use npm run clean, though it cleans itself on npm run build. You can use npm run test to run Jest tests.
-In any case, the program will launch on localhost on port 3000, though this can be altered in app.ts.
+In any of the above cases, to clean it you will need to use npm run clean, and to build use npm run build. You can use npm run test to run Jest tests.
+Various settings, such as limits before timeouts, timeout durations, password generation attempts, default password length and the port (default 3000) can be altered in settings.json. Please note for default password length if it is below 8 or above 32 it will be forcefully changed back to the default (16) when the program initializes.<br>
 After that, you can POST requests to it to generate and validate passwords, as well as GET request it for ping. More info is in the documentation listed below.<br>
 Due to the sensitive nature of the content this API deals with, it is highly recommended to run it on a HTTPS server. <br>
 

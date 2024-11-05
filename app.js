@@ -7,14 +7,14 @@ var settings = require("./settings.json");
 var express = require('express');
 var expressrl = require('express-rate-limit');
 var app = express();
-var port = 3000;
+var port = settings.port;
 var characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
-var defaultlength = 16;
-var regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex
+var defaultlength = settings.defaultlength >= 8 || settings.defaultlength <= 32 ? settings.defaultlength : 16; // to prevent issues with regex, if the user changes it to below 8 / above 32, we change it back to 16.
+var regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex (see Regex checks before below)
 var minutes = settings.minutes; // timeout duration
 var requestlimit = settings.limit; // requests before timeout
 var attemptlimit = settings.attempts; // password generator attempts before giving up
-/* It checks for:
+/* Regex checks for:
 1 uppercase letter
 1 lowercase letter
 1 number
@@ -40,7 +40,6 @@ app.post('/password', function (req, res) {
     // We get the requester's IP for logging purposes, via .ip or Node.js's .socket.remoteAddress, both of which are a string representations of the IP
     var ip = req.ip || req.socket.remoteAddress;
     console.log(ip + " on /password: starting...");
-    // console.log("DEBUG: Length: " + req.body.length + " " + typeof req.body.length);
     var length = defaultlength;
     if (Number.isInteger(Number(req.body.length))) // if the length is a number, we're fine
      {
@@ -54,18 +53,18 @@ app.post('/password', function (req, res) {
         }
         else // else it's nan
          {
-            console.log("Length is a non-numeric string, setting it to default length");
+            console.log(ip + " on /password: Length is a non-numeric string, setting it to default length");
             length = defaultlength;
         }
     }
     if (req.body.length == null || typeof req.body.length === "undefined") // if length is null or an undefined type value
      {
-        console.log("Length is null / undefined, setting it to default length");
+        console.log(ip + " on /password: Length is null / undefined, setting it to default length");
         length = defaultlength;
     }
     if (length < 8 || length > 32) // if length provided is less than 8 or greater than 32
      {
-        console.log("Length is bad, length provided is " + length + " (needs to be 8> or <32)");
+        console.log(ip + " on /password: Length is bad, length provided is " + length + " (needs to be 8> or <32)");
         length = defaultlength;
     }
     console.log(ip + " on /password: success");
@@ -101,7 +100,9 @@ app.post('/validate', function (req, res) {
      {
         console.log(ip + " on /validate: error");
         return res.status(400).json({
-            error: "ERROR: 'password' is null or undefined."
+            "data": {
+                "validate": "ERROR: 'password' is null or undefined."
+            }
         });
     }
 });

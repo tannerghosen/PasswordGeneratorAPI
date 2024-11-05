@@ -3,15 +3,15 @@ import * as settings from './settings.json';
 const express = require('express')
 const expressrl = require('express-rate-limit');
 const app = express();
-const port : number = 3000;
-const characters : String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
-const defaultlength : number = 16;
-const regex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex
-const minutes = settings.minutes; // timeout duration
-const requestlimit = settings.limit; // requests before timeout
-const attemptlimit = settings.attempts; // password generator attempts before giving up
+const port: number = settings.port;
+const characters : string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
+const defaultlength: number = settings.defaultlength >= 8 || settings.defaultlength <= 32 ? settings.defaultlength : 16; // to prevent issues with regex, if the user changes it to below 8 / above 32, we change it back to 16.
+const regex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex (see Regex checks before below)
+const minutes : number = settings.minutes; // timeout duration
+const requestlimit : number = settings.limit; // requests before timeout
+const attemptlimit : number  = settings.attempts; // password generator attempts before giving up
 
-/* It checks for:
+/* Regex checks for:
 1 uppercase letter
 1 lowercase letter
 1 number
@@ -42,7 +42,6 @@ app.post('/password', (req : any, res : any) =>
     // We get the requester's IP for logging purposes, via .ip or Node.js's .socket.remoteAddress, both of which are a string representations of the IP
     let ip: any = req.ip || req.socket.remoteAddress;
     console.log(ip + " on /password: starting...");
-    // console.log("DEBUG: Length: " + req.body.length + " " + typeof req.body.length);
     let length : number = defaultlength;
     if (Number.isInteger(Number(req.body.length))) // if the length is a number, we're fine
     {
@@ -56,18 +55,18 @@ app.post('/password', (req : any, res : any) =>
         }
         else // else it's nan
         {
-            console.log("Length is a non-numeric string, setting it to default length");
+            console.log(ip + " on /password: Length is a non-numeric string, setting it to default length");
             length = defaultlength;
         }
     }
     if (req.body.length == null || typeof req.body.length === "undefined") // if length is null or an undefined type value
     {
-        console.log("Length is null / undefined, setting it to default length");
+        console.log(ip + " on /password: Length is null / undefined, setting it to default length");
         length = defaultlength;
     }
     if (length < 8 || length > 32) // if length provided is less than 8 or greater than 32
     {
-        console.log("Length is bad, length provided is " + length + " (needs to be 8> or <32)");
+        console.log(ip + " on /password: Length is bad, length provided is " + length + " (needs to be 8> or <32)");
         length = defaultlength;
     }
     console.log(ip + " on /password: success");

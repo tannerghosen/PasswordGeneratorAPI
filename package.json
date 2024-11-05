@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
-    "clean": "tsc --build --clean && tsc app.ts"
+    "build": "tsc app.ts --resolveJsonModule && tsc",
+    "clean": "tsc --clean"
   },
   "keywords": [],
   "author": "",

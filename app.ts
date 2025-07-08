@@ -150,7 +150,7 @@ export function ValidatePassword(password: string)
     return !password.match(regex) ? "Sorry, this password isn't strong. A strong password should be a minimum of 8 characters but no longer than 32 and contain an uppercase, lowercase, digit, and special character and no excessive repeating characters." : "This password is strong.";
 }
 
-function DoesItMatchRegex(password: string)
+export function DoesItMatchRegex(password: string)
 {
     return !password.match(regex) ? false : true;
 }

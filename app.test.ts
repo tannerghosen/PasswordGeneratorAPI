@@ -1,4 +1,4 @@
-import { ValidatePassword, GeneratePassword } from "./app";
+import { ValidatePassword, GeneratePassword, DoesItMatchRegex } from "./app";
 
 describe('Validate Password', () =>
 {
@@ -30,5 +30,12 @@ describe('Generate Password 2', () =>
     it("it should generate a 16 length pass", () =>
     {
         expect(GeneratePassword(16)).toHaveLength(16);
+    });
+});
+
+describe('Regex Match', () =>
+{
+    it("should be true", () => {
+        expect(DoesItMatchRegex("asddasdasd3123123123$##@@BOB")).toEqual(true)
     });
 });

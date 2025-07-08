@@ -1,15 +1,17 @@
 /* Variables */
-import * as settings from './settings.json';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
+//import * as settings from './settings.json';
 const express = require('express')
 const expressrl = require('express-rate-limit');
 const app = express();
-const port: number = settings.port;
-const characters : string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
-const defaultlength: number = settings.defaultlength >= 8 || settings.defaultlength <= 32 ? settings.defaultlength : 16; // to prevent issues with regex, if the user changes it to below 8 / above 32, we change it back to 16.
+const port: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const characters: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
+const defaultlength: number = process.env.DEFAULTLENGTH ? (parseInt(process.env.DEFAULTLENGTH) >= 8 && parseInt(process.env.DEFAULTLENGTH) <= 32) ? parseInt(process.env.DEFAULTLENGTH) : 16 : 16; // to prevent issues with regex, if the user changes it to below 8 / above 32, we change it back to 16.
 const regex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex (see Regex checks before below)
-const minutes : number = settings.minutes; // timeout duration
-const requestlimit : number = settings.limit; // requests before timeout
-const attemptlimit : number  = settings.attempts; // password generator attempts before giving up
+const minutes: number = process.env.MINUTES ? parseInt(process.env.MINUTES, 10) : 15; // timeout duration
+const requestlimit: number = process.env.REQUESTLIMIT ? parseInt(process.env.REQUESTLIMIT, 10) : 20; // requests before timeout
+const attemptlimit: number = process.env.ATTEMPTLIMIT ? parseInt(process.env.ATTEMPTLIMIT, 10) : 1000; // password generator attempts before giving up
 
 /* Regex checks for:
 1 uppercase letter
@@ -66,7 +68,7 @@ app.post('/password', (req : any, res : any) =>
     }
     if (length < 8 || length > 32) // if length provided is less than 8 or greater than 32
     {
-        console.log(ip + " on /password: Length is bad, length provided is " + length + " (needs to be 8> or <32)");
+        console.log(ip + " on /password: Length is bad, length provided is " + length + " (needs to be 8>= or <=32)");
         length = defaultlength;
     }
     console.log(ip + " on /password: success");

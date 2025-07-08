@@ -2,18 +2,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GeneratePassword = GeneratePassword;
 exports.ValidatePassword = ValidatePassword;
+exports.DoesItMatchRegex = DoesItMatchRegex;
 /* Variables */
-var settings = require("./settings.json");
+var dotenv = require("dotenv");
+dotenv.config({ path: '.env' });
+//import * as settings from './settings.json';
 var express = require('express');
 var expressrl = require('express-rate-limit');
 var app = express();
-var port = settings.port;
+var port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 var characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
-var defaultlength = settings.defaultlength >= 8 || settings.defaultlength <= 32 ? settings.defaultlength : 16; // to prevent issues with regex, if the user changes it to below 8 / above 32, we change it back to 16.
+var defaultlength = process.env.DEFAULTLENGTH ? (parseInt(process.env.DEFAULTLENGTH) >= 8 && parseInt(process.env.DEFAULTLENGTH) <= 32) ? parseInt(process.env.DEFAULTLENGTH) : 16 : 16; // to prevent issues with regex, if the user changes it to below 8 / above 32, we change it back to 16.
 var regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])(?!.*(.)\1{5,}).{8,32}$/; // password check regex (see Regex checks before below)
-var minutes = settings.minutes; // timeout duration
-var requestlimit = settings.limit; // requests before timeout
-var attemptlimit = settings.attempts; // password generator attempts before giving up
+var minutes = process.env.MINUTES ? parseInt(process.env.MINUTES, 10) : 15; // timeout duration
+var requestlimit = process.env.REQUESTLIMIT ? parseInt(process.env.REQUESTLIMIT, 10) : 20; // requests before timeout
+var attemptlimit = process.env.ATTEMPTLIMIT ? parseInt(process.env.ATTEMPTLIMIT, 10) : 1000; // password generator attempts before giving up
 /* Regex checks for:
 1 uppercase letter
 1 lowercase letter

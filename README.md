@@ -8,6 +8,7 @@ By Tanner Ghosen
 <li>Jest</li>
 <li><a href="https://www.npmjs.com/package/express-rate-limit?activeTab=readme">express-rate-limit</a></li>
 <li><a href="https://kulshekhar.github.io/ts-jest/">ts-jest</a></li>
+<li>dotenv</li>
 </ul>
 
 # Summary

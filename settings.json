@@ -1,7 +1,0 @@
-{
-  "port":  3000,
-  "minutes": 15,
-  "limit": 20,
-  "attempts": 1000,
-  "defaultlength":  16
-}

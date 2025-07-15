@@ -67,7 +67,7 @@ app.post('/password', function (req, res) {
     }
     if (length < 8 || length > 32) // if length provided is less than 8 or greater than 32
      {
-        console.log(ip + " on /password: Length is bad, length provided is " + length + " (needs to be 8> or <32)");
+        console.log(ip + " on /password: Length is bad, length provided is " + length + " (needs to be 8>= or <=32)");
         length = defaultlength;
     }
     console.log(ip + " on /password: success");

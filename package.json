@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc app.ts --resolveJsonModule && tsc",
-    "clean": "tsc --clean"
+    "clean": "tsc app.ts --resolveJsonModule && tsc --build --clean"
   },
   "keywords": [],
   "author": "",
